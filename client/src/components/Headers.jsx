@@ -1,7 +1,25 @@
 import { NavLink } from "react-router-dom";
 import "./Header.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function Headers() {
+  const [userdata, setuserdata] = useState({});
+
+  const getUser = async () => {
+    try {
+      const res = await axios.get("http://localhost:8000//login/success", {
+        withCredentials: true,
+      });
+      setuserdata(res.data.user);
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
   return (
     <header>
       <nav>
