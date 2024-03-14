@@ -13,7 +13,7 @@ const clientsecret = process.env.GOOGLE_CLIENT_SECRET;
 
 app.use(
   cors({
-    origin: "http://localhost:5173/",
+    origin: "http://localhost:5173",
     methods: "GET, POST, PUT, DELETE",
     credentials: true,
   })
@@ -24,7 +24,7 @@ app.use(express.json());
 // setup session
 app.use(
   session({
-    secret: "hello-chiragji-349842=-nm,n-jfdjf",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
   })
@@ -89,6 +89,7 @@ app.get(
 );
 
 app.get("/login/success", async (req, res) => {
+  // console.log(req.user);
   if (req.user) {
     res
       .status(200)
@@ -96,6 +97,16 @@ app.get("/login/success", async (req, res) => {
   } else {
     res.status(400).json({ message: "Not Authorized" });
   }
+});
+
+app.get("/logout", (req, res, next) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    } else {
+      res.redirect("http://localhost:5173");
+    }
+  });
 });
 
 // app.get("/", (req, res) => {
